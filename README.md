@@ -23,7 +23,8 @@ Path: `/api/verify`
 
   
 
-1. Connect to a local mongo DB on PORT : ``27017``
+1. Connect to a local mongo DB on PORT : ``27017`` 
+2. Or I have also integrated an atlas mongo DB with this application. Contact me & I will give you the access to that DB.
 
   
 
