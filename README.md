@@ -37,7 +37,7 @@ Path: `/api/verify`
 
 # Sample request bodies
 
-1. Register new user :
+1. Register new user 
 
    
 
