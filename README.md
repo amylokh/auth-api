@@ -59,24 +59,24 @@ Path: `/api/verify`
 
 2. Login
 
-POST http://localhost:8080/api/login
+     POST http://localhost:8080/api/login
 
-    {
-    
-    "username": "amylokh@gmail.com",
-    
-    "password": "first password"
-    
-    }
+        {
+        
+        "username": "amylokh@gmail.com",
+        
+        "password": "first password"
+        
+        }
 
   
 
 3. Verify whether the token is valid or not
 
-POST http://localhost:8080/api/verify
+     POST http://localhost:8080/api/verify
 
-    {
-    
-    "email": "amylokh@gmail.com"
-    
-    }
+        {
+        
+        "email": "amylokh@gmail.com"
+        
+        }
