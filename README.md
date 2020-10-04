@@ -23,7 +23,7 @@ Path: `/api/verify`
 
   
 
-1. Connect to a local mongo DB on PORT : 27017
+1. Connect to a local mongo DB on PORT : ``27017``
 
   
 
