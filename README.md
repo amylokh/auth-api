@@ -1,6 +1,9 @@
 # Authorization-api 🔐
 
-Simple auth api which can be used to register new users & login
+Simple auth api which can be used to - 
+1. Register new users
+2. Login
+3. Verify whether logged in user is valid or not
 
 ## Install Dependencies
 ```npm install```
