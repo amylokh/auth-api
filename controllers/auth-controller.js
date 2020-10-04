@@ -39,7 +39,7 @@ const login = (req, res, next) => {
                        res.json({error: err});
                    }
                    if (result) {
-                       let idtoken = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'});
+                       let idtoken = jwt.sign({email: user.email}, 'verySecretValue', {expiresIn: '1h'});
                        res.json({
                            message: 'User login successful',
                            idtoken
@@ -59,6 +59,22 @@ const login = (req, res, next) => {
         })
 };
 
+const verify = (req, res, next) => {
+    try {
+        const idtoken = req.headers.authorization.split(' ')[1];
+        const decode = jwt.verify(idtoken, 'verySecretValue');
+        console.log('idtoken: '+ idtoken);
+        console.log('decode: '+ JSON.stringify(decode));
+
+        if (req.body.email === decode.email) {
+            res.json({message: 'Valid authentication token'});
+        }
+    }
+    catch(err) {
+        res.json({message: 'Invalid authentication token provided.'});
+    }
+}
+
 module.exports = {
-    register, login
+    register, login, verify
 };
