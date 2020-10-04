@@ -19,8 +19,7 @@ const register = (req, res, next) => {
         User.findOne({ email: req.body.email })
             .then(user => {
                 if (user) {
-                    res.status(400);
-                    res.json({ message: 'Email already exists' });
+                    res.status(400).json({ message: 'Email already exists' });
                 }
                 else {
                     newUser.save()
@@ -28,14 +27,12 @@ const register = (req, res, next) => {
                             res.json({ message: 'User registered successfully!' });
                         })
                         .catch(err => {
-                            res.status(500);
-                            res.json({ message: 'An error occurred while registering new user' });
+                            res.status(500).json({ message: 'An error occurred while registering new user' });
                         })
                 }
             })
             .catch(err => {
-                res.status(500);
-                res.json({ message: 'An error occurred while finding existing username' });
+                res.status(500).json({ message: 'An error occurred while finding existing username' });
             })
     });
 };
@@ -60,8 +57,7 @@ const login = (req, res, next) => {
                         });
                     }
                     else {
-                        res.status(400);
-                        res.json({ message: 'Incorrect password' });
+                        res.status(400).json({ message: 'Incorrect password' });
                     }
                 })
             }
@@ -83,13 +79,11 @@ const verify = (req, res, next) => {
             res.json({ message: 'Valid authentication token' });
         }
         else {
-            res.status(400);
-            res.json({ message: 'Invalid authentication token provided.' });
+            res.status(400).json({ message: 'Invalid authentication token provided.' });
         }
     }
     catch (err) {
-        res.status(400);
-        res.json({ message: 'Invalid authentication token provided.' });
+        res.status(400).json({ message: 'Invalid authentication token provided.' });
     }
 }
 
