@@ -4,7 +4,11 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const AuthRoute = require('./routes/auth');
 
-mongoose.connect('mongodb://localhost:27017/users-data', {useNewUrlParser: true,useUnifiedTopology: true});
+const atlasMongoDbConnectionString = 'mongodb+srv://amylokh:<password>@users.m73nf.mongodb.net/users?retryWrites=true&w=majority';
+const localDbConnectionString = 'mongodb://localhost:27017/users-data';
+
+mongoose.connect(localDbConnectionString, 
+    {useNewUrlParser: true,useUnifiedTopology: true});
 const db = mongoose.connection;
 
 db.on('error', (err)=> {
