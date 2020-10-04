@@ -29,8 +29,6 @@ const register = (req, res, next) => {
 const login = (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
-    console.log('username: '+ username);
-    console.log('password: '+ password);
 
     User.findOne({$or: [{email: username}, {phone: username}]})
         .then(user=> {
@@ -42,7 +40,6 @@ const login = (req, res, next) => {
                    }
                    if (result) {
                        let idtoken = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'});
-                       console.log('idtoken: '+ idtoken);
                        res.json({
                            message: 'User login successful',
                            idtoken
