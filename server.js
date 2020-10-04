@@ -28,5 +28,4 @@ app.listen(PORT, ()=>{
     console.log(`Server is running on PORT ${PORT}`);
 });
 
-//app.use('/api/employee', EmployeeRoute);
 app.use('/api', AuthRoute);

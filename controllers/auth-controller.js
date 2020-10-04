@@ -63,8 +63,6 @@ const verify = (req, res, next) => {
     try {
         const idtoken = req.headers.authorization.split(' ')[1];
         const decode = jwt.verify(idtoken, 'verySecretValue');
-        console.log('idtoken: '+ idtoken);
-        console.log('decode: '+ JSON.stringify(decode));
 
         if (req.body.email === decode.email) {
             res.json({message: 'Valid authentication token'});
