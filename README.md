@@ -3,13 +3,13 @@
 
 Simple auth api which can be used to -
 
-1. Register new users
+1. Register new users.
 Path: `/api/register`
 
-2. Login
+2. Login.
 Path: `/api/login`
 
-3. Verify whether logged in user is valid or not
+3. Verify whether logged in user is valid or not.
 Path: `/api/verify`
   
 
