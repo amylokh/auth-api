@@ -4,13 +4,13 @@
 Simple auth api which can be used to -
 
 1. Register new users.
-Path: `/api/register`
+Path: `/auth/register`
 
 2. Login.
-Path: `/api/login`
+Path: `/auth/login`
 
 3. Verify whether logged in user is valid or not.
-Path: `/api/verify`
+Path: `/auth/verify`
   
 
 ## Install Dependencies
@@ -42,7 +42,7 @@ Path: `/api/verify`
 
    
 
-     POST http://localhost:8080/api/register
+     POST http://localhost:8080/auth/register
         
         {
         
@@ -60,7 +60,7 @@ Path: `/api/verify`
 
 2. Login
 
-     POST http://localhost:8080/api/login
+     POST http://localhost:8080/auth/login
 
         {
         
@@ -74,7 +74,7 @@ Path: `/api/verify`
 
 3. Verify whether the token is valid or not
 
-     POST http://localhost:8080/api/verify
+     POST http://localhost:8080/auth/verify
 
         {
         

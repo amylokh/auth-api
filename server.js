@@ -32,4 +32,4 @@ app.listen(PORT, ()=>{
     console.log(`Server is running on PORT ${PORT}`);
 });
 
-app.use('/api', AuthRoute);
+app.use('/auth', AuthRoute);
