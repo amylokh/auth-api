@@ -27,7 +27,12 @@ const register = (req, res, next) => {
                             res.json({ message: 'User registered successfully!' });
                         })
                         .catch(err => {
-                            res.status(500).json({ message: 'An error occurred while registering new user' });
+                            if (err.name === 'ValidationError') {
+                                res.status(400).json({message: 'Bad Request'});
+                            }
+                            else {
+                                res.status(500).json({ message: 'An error occurred while registering new user' });
+                            }
                         })
                 }
             })
