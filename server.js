@@ -4,10 +4,10 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const AuthRoute = require('./routes/auth');
 
-const atlasMongoDbConnectionString = 'mongodb+srv://amylokh:<password>@users.m73nf.mongodb.net/users?retryWrites=true&w=majority';
+const atlasMongoDbConnectionString = 'mongodb+srv://amylokh:fms0f1vfQ0W4pLo0@users.m73nf.mongodb.net/users?retryWrites=true&w=majority';
 const localDbConnectionString = 'mongodb://localhost:27017/users-data';
 
-mongoose.connect(localDbConnectionString, 
+mongoose.connect(atlasMongoDbConnectionString, 
     {useNewUrlParser: true,useUnifiedTopology: true});
 const db = mongoose.connection;
 
