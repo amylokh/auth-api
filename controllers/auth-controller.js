@@ -55,10 +55,13 @@ const login = (req, res, next) => {
                         res.json({ error: err });
                     }
                     if (result) {
-                        let idtoken = jwt.sign({ email: user.email }, 'verySecretValue', { expiresIn: '1h' });
+                        let accesstoken = jwt.sign({ email: user.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
+                        let refreshToken = jwt.sign({ email: user.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
+
                         res.json({
                             message: 'User login successful',
-                            idtoken
+                            accesstoken,
+                            refreshToken
                         });
                     }
                     else {
@@ -77,8 +80,8 @@ const login = (req, res, next) => {
 
 const verify = (req, res, next) => {
     try {
-        const idtoken = req.headers.authorization.split(' ')[1];
-        const decode = jwt.verify(idtoken, 'verySecretValue');
+        const accessToken = req.headers.authorization.split(' ')[1];
+        const decode = jwt.verify(accessToken, 'accessTokenSecretKey');
 
         if (req.body.email === decode.email) {
             res.json({ message: 'Valid authentication token' });
@@ -92,6 +95,21 @@ const verify = (req, res, next) => {
     }
 }
 
+const refresh = (req, res, next) => {
+    try {
+        const refreshToken = req.body.refreshToken;
+        const decode = jwt.verify(refreshToken, 'refreshTokenSecretKey');
+
+        let accesstoken = jwt.sign({ email: decode.email }, 'accessTokenSecretKey', { expiresIn: '50s' });
+        let refToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', {expiresIn: '2m'});
+        
+        res.json({accesstoken, "refreshToken": refToken});
+    }
+    catch(err) {
+        res.status(400).json({ message: 'Invalid refresh token provided.' });
+    }
+}
+
 module.exports = {
-    register, login, verify
+    register, login, verify, refresh
 };
