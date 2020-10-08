@@ -9,9 +9,11 @@ Path: `/auth/register`
 2. Login.
 Path: `/auth/login`
 
-3. Verify whether logged in user is valid or not.
+3. Verify whether logged in user is valid or not or whether the access token is valid or not
 Path: `/auth/verify`
-  
+
+4. Refresh the tokens
+Path: `/auth/refresh`
 
 ## Install Dependencies
 
@@ -79,5 +81,15 @@ Path: `/auth/verify`
         {
         
         "email": "amylokh@gmail.com"
+        
+        }
+
+4. Refresh tokens
+
+     POST http://localhost:8080/auth/refresh
+
+        {
+        
+        "refreshToken": "theIssuesRefreshToken"
         
         }
