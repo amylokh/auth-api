@@ -3,12 +3,13 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const AuthRoute = require('./routes/auth');
+require('dotenv').config({path: '../.env'});
 
-const atlasMongoDbConnectionString = 'mongodb+srv://amylokh:fms0f1vfQ0W4pLo0@users.m73nf.mongodb.net/users?retryWrites=true&w=majority';
+const atlasMongoDbConnectionString = 'mongodb+srv://'+ process.env['USERNAME'] +':'+ process.env['PASSWORD'] + '@users.m73nf.mongodb.net/users?retryWrites=true&w=majority';
 const localDbConnectionString = 'mongodb://localhost:27017/users-data';
 
 mongoose.connect(atlasMongoDbConnectionString, 
-    {useNewUrlParser: true,useUnifiedTopology: true});
+    {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
 db.on('error', (err)=> {
@@ -28,7 +29,7 @@ app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });
 
