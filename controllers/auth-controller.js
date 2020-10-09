@@ -52,12 +52,13 @@ const login = (req, res, next) => {
                 bcrypt.compare(password, user.password, function (err, result) {
                     if (err) {
                         console.log('error: ' + err);
-                        res.json({ error: err });
+                        res.status(500).json({ error: 'Internal Server error' });
                     }
                     if (result) {
                         let accesstoken = jwt.sign({ email: user.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
                         let refreshToken = jwt.sign({ email: user.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
 
+                        // push refresh token to refresh token config with user ID
                         res.json({
                             message: 'User login successful',
                             accesstoken,
@@ -70,7 +71,7 @@ const login = (req, res, next) => {
                 })
             }
             else {
-                res.json({ message: 'No user found' });
+                res.status(404).json({ message: 'No user found' });
             }
         })
         .catch(err => {
@@ -103,6 +104,7 @@ const refresh = (req, res, next) => {
         let accesstoken = jwt.sign({ email: decode.email }, 'accessTokenSecretKey', { expiresIn: '50s' });
         let refToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', {expiresIn: '2m'});
         
+        //push refresh token to refresh token config with user ID
         res.json({accesstoken, "refreshToken": refToken});
     }
     catch(err) {
