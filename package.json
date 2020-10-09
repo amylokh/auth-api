@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "forever": "mkdir foreverLogs && ./node_modules/.bin/forever --minUptime=1000 --spinSleepTime=1000 forever.json"
+    "forever": "rm -rf foreverLogs && mkdir foreverLogs && ./node_modules/.bin/forever start --minUptime=1000 --spinSleepTime=1000 forever.json"
   },
   "repository": {
     "type": "git",

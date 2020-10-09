@@ -4,7 +4,6 @@
     "watch": true,
     "script": "server.js",
     "sourceDir": "../auth-api",
-    "logFile": "../auth-api/foreverLogs/auth-api-server.log",
     "outFile": "../auth-api/foreverLogs/out.log",
     "errFile": "../auth-api/foreverLogs/error.log"
 }
