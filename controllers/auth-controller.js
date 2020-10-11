@@ -1,6 +1,8 @@
 const User = require('../models/User');
+const RefreshConfig = require('../models/RefreshConfig');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const register = (req, res, next) => {
 
@@ -13,7 +15,8 @@ const register = (req, res, next) => {
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
-            password: hashedPassword
+            password: hashedPassword,
+            refreshConfigId : mongoose.Types.ObjectId()
         });
 
         User.findOne({ email: req.body.email })
@@ -58,7 +61,23 @@ const login = (req, res, next) => {
                         let accesstoken = jwt.sign({ email: user.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
                         let refreshToken = jwt.sign({ email: user.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
 
-                        // push refresh token to refresh token config with user ID
+                        var date = new Date();
+                        date.setDate(date.getDate() + 3);
+
+                        let newRefreshConfig = new RefreshConfig({
+                            _id: mongoose.Types.ObjectId(user.refreshConfigId),
+                            token: {refreshToken, expiresIn: date}
+                        });
+
+                    // push new refresh token if it doesn't exist or update the existing one
+                    RefreshConfig.findOneAndUpdate({email : user.email}, newRefreshConfig, {upsert: true})
+                        .then(refreshConfig => {
+                            console.log("New refresh config created/updated successfully");
+                        })
+                        .catch(err=> {
+                            console.log("Error occurred while creating/updating refresh config: " + err);
+                        });
+
                         res.json({
                             message: 'User login successful',
                             accesstoken,
@@ -101,11 +120,41 @@ const refresh = (req, res, next) => {
         const refreshToken = req.body.refreshToken;
         const decode = jwt.verify(refreshToken, 'refreshTokenSecretKey');
 
-        let accesstoken = jwt.sign({ email: decode.email }, 'accessTokenSecretKey', { expiresIn: '50s' });
-        let refToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', {expiresIn: '2m'});
+        //if refresh token exists then update it in db & send it in response, else throw invalid refresh token provided
+        RefreshConfig.findOne({"token.refreshToken": refreshToken})
+            .then(result => {
+                if (result) {
+                    const accesstoken = jwt.sign({ email: decode.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
+                    const newRefToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
+
+                    var date = new Date();
+                    date.setDate(date.getDate() + 3);
+
+                    let newRefreshConfig = new RefreshConfig({
+                        token: {
+                            refreshToken: newRefToken,
+                            expiresIn: date
+                        }
+                    });
+
+                    RefreshConfig.findOneAndUpdate({email : decode.email}, newRefreshConfig)
+                        .then(res=> {
+                            console.log("Refresh token updated successfully");
+                        })
+                        .catch(err=> {
+                            console.log(err);
+                        })
+
+                    res.json({accesstoken, "refreshToken": newRefToken});
+                }
+                else {
+                    res.status(400).json({message : 'Invalid refresh token provided'});
+                }
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({message : 'Internal server error'});
+            })
         
-        //push refresh token to refresh token config with user ID
-        res.json({accesstoken, "refreshToken": refToken});
     }
     catch(err) {
         res.status(400).json({ message: 'Invalid refresh token provided.' });
