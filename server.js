@@ -9,7 +9,11 @@ const atlasMongoDbConnectionString = 'mongodb+srv://'+ process.env['USERNAME'] +
 const localDbConnectionString = 'mongodb://localhost:27017/users-data';
 
 mongoose.connect(atlasMongoDbConnectionString, 
-    {useNewUrlParser: true, useUnifiedTopology: true});
+    {
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        useFindAndModify: false
+    });
 const db = mongoose.connection;
 
 db.on('error', (err)=> {
