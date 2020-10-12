@@ -101,11 +101,14 @@ const login = (req, res, next) => {
 const verify = (req, res, next) => {
     try {
         const accessToken = req.headers.authorization.split(' ')[1];
+        const refreshToken = req.body.refreshToken;
+
         const decode = jwt.verify(accessToken, 'accessTokenSecretKey');
+        jwt.verify(refreshToken, 'refreshTokenSecretKey');
 
         // check if email is matching & refresh token exists in db
         if (req.body.email === decode.email) {
-            RefreshConfig.findOne({"token.refreshToken": req.body.refreshToken})
+            RefreshConfig.findOne({"token.refreshToken": refreshToken})
                 .then(result => {
                     if (result) {
                         res.json({ message: 'Valid authentication token' });
