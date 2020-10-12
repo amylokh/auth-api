@@ -103,8 +103,21 @@ const verify = (req, res, next) => {
         const accessToken = req.headers.authorization.split(' ')[1];
         const decode = jwt.verify(accessToken, 'accessTokenSecretKey');
 
+        // check if email is matching & refresh token exists in db
         if (req.body.email === decode.email) {
-            res.json({ message: 'Valid authentication token' });
+            RefreshConfig.findOne({"token.refreshToken": req.body.refreshToken})
+                .then(result => {
+                    if (result) {
+                        res.json({ message: 'Valid authentication token' });
+                    }
+                    else {
+                        res.status(400).json({ message: 'Invalid authentication token provided.' });
+                    }
+                })
+                .catch(err=> {
+                    console.log(err);
+                    res.status(500).json({message: 'Internal server error'});
+                })
         }
         else {
             res.status(400).json({ message: 'Invalid authentication token provided.' });
@@ -161,6 +174,30 @@ const refresh = (req, res, next) => {
     }
 }
 
+const logout = (req, res, next) => {
+    try {
+        const refreshToken = req.body.refreshToken;
+        jwt.verify(refreshToken, 'refreshTokenSecretKey');
+
+        RefreshConfig.findOneAndDelete({"token.refreshToken": refreshToken})
+            .then(result => {
+                if(result) {
+                    res.status(200).json({message: 'Logged out successfully'});
+                }
+                else {
+                    res.status(400).json({message: 'Invalid refresh token provided'});
+                }
+            })
+            .catch(err=> {
+                console.log(err);
+                res.status(400).json({message: 'Invalid refresh token provided'});
+            })
+    }
+    catch(err) {
+        res.status(400).json({ message: 'Invalid refresh token provided.' });
+    }
+}
+
 module.exports = {
-    register, login, verify, refresh
+    register, login, verify, refresh, logout
 };
