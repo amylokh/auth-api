@@ -9,11 +9,14 @@ Path: `/auth/register`
 2. Login.
 Path: `/auth/login`
 
-3. Verify whether logged in user is valid or not or whether the access token is valid or not
+3. Verify if the access token & refresh token are valid
 Path: `/auth/verify`
 
 4. Refresh the tokens
 Path: `/auth/refresh`
+
+5. Log out
+Path: `/auth/logout`
 
 ## Install Dependencies
 
@@ -79,14 +82,24 @@ Path: `/auth/refresh`
      POST http://localhost:8080/auth/verify
 
         {
-        
-        "email": "amylokh@gmail.com"
-        
+        "email": "amylokh@gmail.com",
+        "refreshToken": "issued refresh token"
         }
+        And pass access token in Authorization header as `Bearer accesstoken`
 
 4. Refresh tokens
 
      POST http://localhost:8080/auth/refresh
+
+        {
+        
+        "refreshToken": "theIssuesRefreshToken"
+        
+        }
+
+5. Log out
+
+     POST http://localhost:8080/auth/logout
 
         {
         
