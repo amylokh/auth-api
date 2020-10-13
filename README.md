@@ -93,7 +93,7 @@ Path: `/auth/logout`
 
         {
         
-        "refreshToken": "theIssuesRefreshToken"
+        "refreshToken": "theIssuedRefreshToken"
         
         }
 
@@ -103,6 +103,6 @@ Path: `/auth/logout`
 
         {
         
-        "refreshToken": "theIssuesRefreshToken"
+        "refreshToken": "theIssuedRefreshToken"
         
         }
