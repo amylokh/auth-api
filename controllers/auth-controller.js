@@ -179,7 +179,7 @@ const refresh = (req, res, next) => {
 
 const logout = (req, res, next) => {
     try {
-        const refreshToken = req.body.refreshToken;
+        const refreshToken = req.query.refreshToken;
         jwt.verify(refreshToken, 'refreshTokenSecretKey');
 
         RefreshConfig.findOneAndDelete({"token.refreshToken": refreshToken})
