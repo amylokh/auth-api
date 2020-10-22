@@ -66,7 +66,10 @@ const login = (req, res, next) => {
 
                         let newRefreshConfig = new RefreshConfig({
                             _id: mongoose.Types.ObjectId(user.refreshConfigId),
-                            token: {refreshToken, expiresIn: date}
+                            token: {
+                                refreshToken, 
+                                expiresIn: date
+                            }
                         });
 
                     // push new refresh token if it doesn't exist or update the existing one
@@ -111,7 +114,7 @@ const verify = (req, res, next) => {
             RefreshConfig.findOne({"token.refreshToken": refreshToken})
                 .then(result => {
                     if (result) {
-                        res.json({ message: 'Valid authentication token' });
+                        res.status(200).json({ message: 'Valid authentication token' });
                     }
                     else {
                         res.status(400).json({ message: 'Invalid authentication token provided.' });
