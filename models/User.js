@@ -11,7 +11,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         lowercase: true,
-        match: [emailRegex, 'email format is invalid']
+        match: [emailRegex, 'Invalid email format']
     },
     phone : {
         type: String,
