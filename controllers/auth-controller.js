@@ -16,7 +16,7 @@ const register = (req, res, next) => {
             email: req.body.email,
             phone: req.body.phone,
             password: hashedPassword,
-            refreshConfigId : mongoose.Types.ObjectId()
+            refreshConfigId: mongoose.Types.ObjectId()
         });
 
         User.findOne({ email: req.body.email })
@@ -31,7 +31,7 @@ const register = (req, res, next) => {
                         })
                         .catch(err => {
                             if (err.name === 'ValidationError') {
-                                res.status(400).json({message: 'Bad Request'});
+                                res.status(400).json({ message: 'Bad Request' });
                             }
                             else {
                                 res.status(500).json({ message: 'An error occurred while registering new user' });
@@ -59,7 +59,7 @@ const login = (req, res, next) => {
                     }
                     if (result) {
                         let accesstoken = jwt.sign({ email: user.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
-                        let refreshToken = jwt.sign({ email: user.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
+                        let refreshToken = jwt.sign({ email: user.email }, 'refreshTokenSecretKey', { expiresIn: '3d' });
 
                         var date = new Date();
                         date.setDate(date.getDate() + 3);
@@ -67,19 +67,19 @@ const login = (req, res, next) => {
                         let newRefreshConfig = new RefreshConfig({
                             _id: mongoose.Types.ObjectId(user.refreshConfigId),
                             token: {
-                                refreshToken, 
+                                refreshToken,
                                 expiresIn: date
                             }
                         });
 
-                    // push new refresh token if it doesn't exist or update the existing one
-                    RefreshConfig.findOneAndUpdate({email : user.email}, newRefreshConfig, {upsert: true})
-                        .then(refreshConfig => {
-                            console.log("New refresh config created/updated successfully");
-                        })
-                        .catch(err=> {
-                            console.log("Error occurred while creating/updating refresh config: " + err);
-                        });
+                        // push new refresh token if it doesn't exist or update the existing one
+                        RefreshConfig.findOneAndUpdate({ email: user.email }, newRefreshConfig, { upsert: true })
+                            .then(refreshConfig => {
+                                console.log("New refresh config created/updated successfully");
+                            })
+                            .catch(err => {
+                                console.log("Error occurred while creating/updating refresh config: " + err);
+                            });
 
                         res.json({
                             message: 'User login successful',
@@ -111,7 +111,7 @@ const verify = (req, res, next) => {
 
         // check if email is matching & refresh token exists in db
         if (req.body.email === decode.email) {
-            RefreshConfig.findOne({"token.refreshToken": refreshToken})
+            RefreshConfig.findOne({ "token.refreshToken": refreshToken })
                 .then(result => {
                     if (result) {
                         res.status(200).json({ message: 'Valid authentication token' });
@@ -120,9 +120,9 @@ const verify = (req, res, next) => {
                         res.status(400).json({ message: 'Invalid authentication token provided.' });
                     }
                 })
-                .catch(err=> {
+                .catch(err => {
                     console.log(err);
-                    res.status(500).json({message: 'Internal server error'});
+                    res.status(500).json({ message: 'Internal server error' });
                 })
         }
         else {
@@ -140,11 +140,11 @@ const refresh = (req, res, next) => {
         const decode = jwt.verify(refreshToken, 'refreshTokenSecretKey');
 
         //if refresh token exists then update it in db & send it in response, else throw invalid refresh token provided
-        RefreshConfig.findOne({"token.refreshToken": refreshToken})
+        RefreshConfig.findOne({ "token.refreshToken": refreshToken })
             .then(result => {
                 if (result) {
                     const accesstoken = jwt.sign({ email: decode.email }, 'accessTokenSecretKey', { expiresIn: '5m' });
-                    const newRefToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', {expiresIn: '3d'});
+                    const newRefToken = jwt.sign({ email: decode.email }, 'refreshTokenSecretKey', { expiresIn: '3d' });
 
                     var date = new Date();
                     date.setDate(date.getDate() + 3);
@@ -156,26 +156,26 @@ const refresh = (req, res, next) => {
                         }
                     });
 
-                    RefreshConfig.findOneAndUpdate({email : decode.email}, newRefreshConfig)
-                        .then(res=> {
+                    RefreshConfig.findOneAndUpdate({ email: decode.email }, newRefreshConfig)
+                        .then(res => {
                             console.log("Refresh token updated successfully");
                         })
-                        .catch(err=> {
+                        .catch(err => {
                             console.log(err);
                         })
 
-                    res.json({accesstoken, "refreshToken": newRefToken});
+                    res.json({ accesstoken, "refreshToken": newRefToken });
                 }
                 else {
-                    res.status(400).json({message : 'Invalid refresh token provided'});
+                    res.status(400).json({ message: 'Invalid refresh token provided' });
                 }
             }).catch(err => {
                 console.log(err);
-                res.status(500).json({message : 'Internal server error'});
+                res.status(500).json({ message: 'Internal server error' });
             })
-        
+
     }
-    catch(err) {
+    catch (err) {
         res.status(400).json({ message: 'Invalid refresh token provided.' });
     }
 }
@@ -185,21 +185,21 @@ const logout = (req, res, next) => {
         const refreshToken = req.query.refreshToken;
         jwt.verify(refreshToken, 'refreshTokenSecretKey');
 
-        RefreshConfig.findOneAndDelete({"token.refreshToken": refreshToken})
+        RefreshConfig.findOneAndDelete({ "token.refreshToken": refreshToken })
             .then(result => {
-                if(result) {
-                    res.status(200).json({message: 'Logged out successfully'});
+                if (result) {
+                    res.status(200).json({ message: 'Logged out successfully' });
                 }
                 else {
-                    res.status(400).json({message: 'Invalid refresh token provided'});
+                    res.status(400).json({ message: 'Invalid refresh token provided' });
                 }
             })
-            .catch(err=> {
+            .catch(err => {
                 console.log(err);
-                res.status(400).json({message: 'Invalid refresh token provided'});
+                res.status(400).json({ message: 'Invalid refresh token provided' });
             })
     }
-    catch(err) {
+    catch (err) {
         res.status(400).json({ message: 'Invalid refresh token provided.' });
     }
 }
