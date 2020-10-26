@@ -103,6 +103,7 @@ const login = (req, res, next) => {
 
 const verify = (req, res, next) => {
     try {
+        //if req body has a valid API key then give access
         const accessToken = req.headers.authorization.split(' ')[1];
         const refreshToken = req.body.refreshToken;
 

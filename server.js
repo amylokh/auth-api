@@ -39,3 +39,5 @@ app.listen(PORT, () => {
 });
 
 app.use('/auth', AuthRoute);
+
+app.get('/health', (req, res) => res.status(200).send('I\'m Healthy'));
