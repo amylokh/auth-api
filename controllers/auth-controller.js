@@ -40,7 +40,7 @@ const register = (req, res, next) => {
                 }
             })
             .catch(err => {
-                res.status(500).json({ message: 'An error occurred while finding existing username' });
+                res.status(500).json({ message: 'Internal Server Error' });
             })
     });
 };
